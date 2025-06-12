@@ -1,0 +1,17 @@
+[project]
+name = "pictionary"
+version = "0.1.0"
+description = "A SST app"
+dependencies = ["core", "functions"]
+
+# It is recommended to specify your python version to match your Lambda runtime otherwise you may
+# encounter issues with dependencies.
+requires-python = "==3.12.*"
+
+[tool.uv.workspace]
+members = ["functions", "core"]
+
+[tool.uv.sources]
+sst = { git = "https://github.com/sst/sst.git", subdirectory = "sdk/python", branch = "dev" }
+core = { workspace = true }
+functions = { workspace = true }

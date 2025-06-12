@@ -1,0 +1,19 @@
+{
+  "name": "pictionary",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "sst dev",
+    "deploy": "sst deploy",
+    "secret": "sst secret",
+    "remove": "sst remove",
+    "unlock": "sst unlock",
+    "repomix": "repomix",
+    "web:dev": "pnpm --filter web dev",
+    "web:build": "pnpm --filter web build",
+    "web:install": "pnpm --filter web install"
+  },
+  "dependencies": {
+    "sst": "^3"
+  }
+}
