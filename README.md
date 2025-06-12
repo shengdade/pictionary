@@ -52,10 +52,10 @@ The game is deployed and available at: **https://dflbx3kuo9m9d.cloudfront.net/**
 graph TB
     User["👤 Player"] --> CDN["🌐 CloudFront CDN<br/>Next.js App"]
 
-    CDN --> ServerLambda["⚡ Next.js Lambda<br/>SSR/API Routes"]
+    CDN --> ServerLambda["⚡ Next.js Lambda<br/>SSR/Static Rendering"]
     CDN --> Assets["📦 S3 Bucket<br/>Static Assets"]
 
-    ServerLambda --> API["🚪 API Gateway<br/>Game API"]
+    User --> API["🚪 API Gateway<br/>Game API"]
 
     API --> GameLambda["⚡ FastAPI Lambda<br/>Game Logic"]
 
@@ -71,6 +71,15 @@ graph TB
         DB
     end
 ```
+
+### Architecture Flow
+
+1. **User Request**: Player visits the game URL, which is served by CloudFront CDN
+2. **Content Delivery**: CloudFront delivers the Next.js application (HTML, CSS, JavaScript) and static assets from S3
+3. **Server-Side Rendering**: Next.js Lambda handles any server-side rendering and serves the initial page
+4. **Client-Side Interaction**: Once loaded in the browser, the React application makes direct API calls to the API Gateway
+5. **Game Logic**: API Gateway routes game requests (`/api/game/*`) to the FastAPI Lambda function
+6. **Data & AI**: FastAPI Lambda manages game state in DynamoDB and generates SVG drawings using OpenAI API
 
 ## 📁 Project Structure
 

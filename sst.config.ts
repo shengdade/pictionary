@@ -58,12 +58,24 @@ export default $config({
     api.route("PUT /api/{proxy+}", apiHandler.arn);
     api.route("DELETE /api/{proxy+}", apiHandler.arn);
 
+    // PostHog analytics
+    const posthogHost = new sst.Secret(
+      "PostHogHost",
+      "https://us.i.posthog.com"
+    );
+    const posthogKey = new sst.Secret(
+      "PostHogKey",
+      "phc_GG2PwNsP8qXYPha5qBOUqHGDNowXvAUoxaB74HCL43u"
+    );
+
     // Next.js web app
     const web = new sst.aws.Nextjs("Web", {
       path: "./web",
       link: [api],
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
+        NEXT_PUBLIC_POSTHOG_HOST: posthogHost.value,
+        NEXT_PUBLIC_POSTHOG_KEY: posthogKey.value,
       },
     });
 
