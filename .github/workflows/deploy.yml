@@ -41,4 +41,4 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to Production
-        run: pnpm run deploy --stage dade
+        run: pnpm run deploy --stage production

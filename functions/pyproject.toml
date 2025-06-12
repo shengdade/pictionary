@@ -5,11 +5,9 @@ description = "Lambda function handlers"
 dependencies = [
     "core", 
     "sst",
-    "fastapi>=0.104.0",
+    "fastapi>=0.104.0", 
     "mangum>=0.17.0",
     "boto3>=1.34.0",
-    "python-jose[cryptography]>=3.3.0",
-    "python-multipart>=0.0.6",
     "pydantic>=2.5.0",
     "openai>=1.7.0"
 ]

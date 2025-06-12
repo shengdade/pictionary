@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "🎨 Pictionary AI - Single Player Word Guessing Game",
   description:
-    "Play Pictionary with AI! A fun single-player word guessing game where you guess words with AI-generated hints. Choose from easy, medium, or hard difficulty levels.",
-  keywords: "pictionary, word game, AI hints, guessing game, single player",
+    "Play Pictionary with AI! A fun single-player word guessing game where you guess what the AI is drawing. You have 5 attempts and 2 minutes to solve each puzzle!",
+  keywords: "pictionary, word game, AI drawing, guessing game, single player",
 };
 
 export default function RootLayout({
