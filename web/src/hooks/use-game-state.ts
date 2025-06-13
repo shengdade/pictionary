@@ -1,3 +1,4 @@
+import posthog from "posthog-js";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -24,10 +25,22 @@ export const useGameState = () => {
     setLoading(true);
     try {
       const newGame = await ApiClient.createGame();
+
+      // Track game creation
+      posthog.capture("game_started", {
+        gameId: newGame.gameId,
+        timestamp: new Date().toISOString(),
+      });
+
       setGame(newGame);
       setGameHistory([]);
       toast.success(GAME_MESSAGES.NEW_GAME_SUCCESS);
     } catch (error) {
+      // Track game creation failure
+      posthog.capture("game_creation_failed", {
+        error: error instanceof Error ? error.message : "Unknown error",
+        timestamp: new Date().toISOString(),
+      });
       toast.error(GAME_MESSAGES.CREATE_GAME_ERROR);
       console.error("Error creating game:", error);
     } finally {

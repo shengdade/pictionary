@@ -1,3 +1,4 @@
+import posthog from "posthog-js";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +26,47 @@ export const useGuessSubmission = ({ game, setGame, setGameHistory }: UseGuessSu
           gameId: game.gameId,
           guess: guess.trim(),
         });
+
+        // Track guess submission
+        posthog.capture("guess_submitted", {
+          gameId: game.gameId,
+          guess: guess.trim(),
+          guessNumber: result.attempts,
+          correct: result.correct,
+          gameStatus: result.status,
+          timeRemaining: game.timeLeft,
+          guessLength: guess.trim().length,
+          hasNumbers: /\d/.test(guess.trim()),
+          hasSpecialChars: /[^a-zA-Z0-9\s]/.test(guess.trim()),
+          wordCount: guess.trim().split(" ").length,
+          timestamp: new Date().toISOString(),
+        });
+
+        // Track game completion events
+        if (result.status === "won") {
+          posthog.capture("game_won", {
+            gameId: game.gameId,
+            finalScore: result.score,
+            attempts: result.attempts,
+            word: result.word,
+            timestamp: new Date().toISOString(),
+          });
+        } else if (result.status === "lost") {
+          posthog.capture("game_lost", {
+            gameId: game.gameId,
+            finalAttempts: result.attempts,
+            word: result.word,
+            reason: "max_attempts_reached",
+            timestamp: new Date().toISOString(),
+          });
+        } else if (result.status === "timeout") {
+          posthog.capture("game_timeout", {
+            gameId: game.gameId,
+            attempts: result.attempts,
+            word: result.word,
+            timestamp: new Date().toISOString(),
+          });
+        }
 
         setGame(prev =>
           prev
@@ -57,6 +99,13 @@ export const useGuessSubmission = ({ game, setGame, setGameHistory }: UseGuessSu
           toast.info(result.message);
         }
       } catch (error) {
+        // Track guess submission failure
+        posthog.capture("guess_submission_failed", {
+          gameId: game.gameId,
+          guess: guess.trim(),
+          error: error instanceof Error ? error.message : "Unknown error",
+          timestamp: new Date().toISOString(),
+        });
         toast.error(GAME_MESSAGES.SUBMIT_GUESS_ERROR);
         console.error("Error submitting guess:", error);
       } finally {
